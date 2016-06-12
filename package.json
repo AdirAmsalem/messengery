@@ -1,0 +1,36 @@
+{
+  "name": "messengery",
+  "version": "0.0.1",
+  "description": "Simple framework for creating Messenger bots",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdirAmsalem/messengery.git"
+  },
+  "keywords": [
+    "facebook",
+    "messenger",
+    "messenger-bot",
+    "messengery"
+  ],
+  "dependencies": {
+    "request": "^2.72.0"
+  },
+  "engines": {
+    "node": "^6.2.1"
+  },
+  "author": "Adir Amsalem",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AdirAmsalem/messengery/issues"
+  },
+  "homepage": "https://github.com/AdirAmsalem/messengery#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "sinon": "^1.17.4"
+  }
+}
