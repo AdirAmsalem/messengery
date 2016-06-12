@@ -10,13 +10,13 @@ describe('messengerApi', () => {
   const config = {};
   let sandbox;
 
-  beforeEach(function () {
+  beforeEach(() => {
     sandbox = sinon.sandbox.create();
     sandbox.stub(graphApi, 'sendMessage');
     sandbox.stub(graphApi, 'threadSettings');
   });
 
-  afterEach(function () {
+  afterEach(() => {
     sandbox.restore();
   });
 
