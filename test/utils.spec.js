@@ -67,4 +67,13 @@ describe('utils', () => {
     expect(button.title).to.equal(title);
     expect(button.url).to.equal(url);
   });
+
+  it('should return an image message', () => {
+    const url = 'http://domain.com/image.png';
+
+    const message = utils.buildImageMessage(url);
+
+    expect(message.attachment.type).to.equal('image');
+    expect(message.attachment.payload.url).to.equal(url);
+  });
 });

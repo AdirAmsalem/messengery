@@ -35,8 +35,10 @@ describe('messagesHandler', () => {
     });
 
     it('should call the listener', () => {
-      messagesHandler.handle(bot, listeners, userId, 'hello');
-      expect(listener.calledOnce).to.be.ok;
+      const text = 'hello';
+      messagesHandler.handle(bot, listeners, userId, text);
+
+      expect(listener.calledWith(bot, userId, {text})).to.be.ok;
     });
   });
 
@@ -60,13 +62,19 @@ describe('messagesHandler', () => {
     });
 
     it('should call the listener', () => {
-      messagesHandler.handle(bot, listeners, userId, 'my name is Joe');
-      expect(listener.calledOnce).to.be.ok;
+      const text = 'my name is Joe';
+      messagesHandler.handle(bot, listeners, userId, text);
+
+      expect(listener.calledWithMatch(bot, userId, {text})).to.be.ok;
     });
 
     it('should pass matches to listener', () => {
-      messagesHandler.handle(bot, listeners, userId, 'my name is Joe');
-      expect(listener.args[0][2].matches[1]).to.equal('Joe');
+      const text = 'my name is Joe';
+      const matches = matcher.exec(text);
+
+      messagesHandler.handle(bot, listeners, userId, text);
+
+      expect(listener.calledWith(bot, userId, {text, matches})).to.be.ok;
     });
   });
 });

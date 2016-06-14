@@ -40,6 +40,6 @@ describe('postbacksHandler', () => {
 
     postbacksHandler.handle(bot, listeners, userId, payload);
 
-    expect(listener.calledOnce).to.be.ok;
+    expect(listener.calledWith(bot, userId, payload.data)).to.be.ok;
   });
 });

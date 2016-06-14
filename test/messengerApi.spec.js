@@ -24,7 +24,6 @@ describe('messengerApi', () => {
     const message = 'welcome!';
     messengerApi.setWelcomeScreenMessage(config, message);
 
-    expect(graphApi.threadSettings.calledOnce).to.be.ok;
     expect(graphApi.threadSettings.args[0][1].call_to_actions[0].message).to.deep.equal({text: message})
   });
 
