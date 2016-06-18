@@ -12,8 +12,8 @@ describe('messengerApi', () => {
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
-    sandbox.stub(graphApi, 'sendMessage');
-    sandbox.stub(graphApi, 'threadSettings');
+    sandbox.spy(graphApi, 'sendMessage');
+    sandbox.spy(graphApi, 'threadSettings');
   });
 
   afterEach(() => {

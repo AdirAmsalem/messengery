@@ -1,13 +1,16 @@
+'use strict';
+
 const graphApi = require('./lib/graphApi');
 const messengerApi = require('./lib/messengerApi');
-const postbacksHandler = require('./lib/postbacksHandler');
-const messagesHandler = require('./lib/messagesHandler');
+const conversationFactory = require('./lib/conversationFactory');
+const webhooksHandler = require('./lib/webhooksHandler');
 
 const utils = require('./lib/utils');
 
 const createBot = (app, options) => {
   const messageListeners = new Map();
   const postbackListeners = new Map();
+  const conversations = new Map();
 
   const methods = {
     send(userId, message, delay) {
@@ -30,6 +33,11 @@ const createBot = (app, options) => {
     },
     setWelcomeScreenMessage(message) {
       messengerApi.setWelcomeScreenMessage(options, message);
+    },
+    startConversation(userId) {
+      const conversation = conversationFactory.create(methods, userId);
+      conversations.set(userId, conversation);
+      return conversation;
     }
   };
 
@@ -43,21 +51,7 @@ const createBot = (app, options) => {
 
   app.post(`${options.webhooksPath}/`, (req, res) => {
     console.log(`Incoming request: ${JSON.stringify(req.body)}`);
-
-    const messagingEvents = req.body.entry[0].messaging;
-    messagingEvents.forEach(event => {
-      const userId = event.sender.id;
-
-      if (event.postback) {
-        const payload = JSON.parse(event.postback.payload);
-        postbacksHandler.handle(methods, postbackListeners, userId, payload);
-
-      } else if (event.message && event.message.text) {
-        const text = event.message.text;
-        messagesHandler.handle(methods, messageListeners, userId, text);
-      }
-    });
-
+    webhooksHandler.handle(methods, conversations, messageListeners, postbackListeners, req.body);
     res.sendStatus(200);
   });
 

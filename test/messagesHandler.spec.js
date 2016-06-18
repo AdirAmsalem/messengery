@@ -25,19 +25,18 @@ describe('messagesHandler', () => {
     });
 
     it('should not call the listener', () => {
-      messagesHandler.handle(bot, listeners, userId, 'bye');
+      messagesHandler.handle(bot, listeners, userId, {text: 'bye'});
       expect(listener.notCalled).to.be.ok;
     });
 
     it('should send back an error', () => {
-      messagesHandler.handle(bot, listeners, userId, 'bye');
+      messagesHandler.handle(bot, listeners, userId, {text: 'bye'});
       expect(bot.send.calledWithMatch(userId, /Cannot handle message/)).to.be.ok;
     });
 
     it('should call the listener', () => {
       const text = 'hello';
-      messagesHandler.handle(bot, listeners, userId, text);
-
+      messagesHandler.handle(bot, listeners, userId, {text});
       expect(listener.calledWith(bot, userId, {text})).to.be.ok;
     });
   });
@@ -52,29 +51,22 @@ describe('messagesHandler', () => {
     });
 
     it('should not call the listener', () => {
-      messagesHandler.handle(bot, listeners, userId, 'Your name is Joe');
+      messagesHandler.handle(bot, listeners, userId, {text: 'Your name is Joe'});
       expect(listener.notCalled).to.be.ok;
     });
 
     it('should send back an error', () => {
-      messagesHandler.handle(bot, listeners, userId, 'Your name is Joe');
+      messagesHandler.handle(bot, listeners, userId, {text: 'Your name is Joe'});
       expect(bot.send.calledWithMatch(userId, /Cannot handle message/)).to.be.ok;
     });
 
-    it('should call the listener', () => {
-      const text = 'my name is Joe';
-      messagesHandler.handle(bot, listeners, userId, text);
+    it('should call the listeners with text and matches', () => {
+      const message = {text: 'my name is Joe'};
+      const matches = matcher.exec(message.text);
 
-      expect(listener.calledWithMatch(bot, userId, {text})).to.be.ok;
-    });
+      messagesHandler.handle(bot, listeners, userId, message);
 
-    it('should pass matches to listener', () => {
-      const text = 'my name is Joe';
-      const matches = matcher.exec(text);
-
-      messagesHandler.handle(bot, listeners, userId, text);
-
-      expect(listener.calledWith(bot, userId, {text, matches})).to.be.ok;
+      expect(listener.calledWith(bot, userId, {text: message.text, matches})).to.be.ok;
     });
   });
 });
